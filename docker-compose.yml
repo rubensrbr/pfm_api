@@ -3,15 +3,14 @@ services:
   db:
     image: postgres
     restart: always
-    volumes:
-      - "./pfm_pg_data:/var/lib/postgresql/data"
-    ports:
-      - 5432:5432
-
     environment:
       - POSTGRES_DB=pfm
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
 
   adminer:
     image: adminer
