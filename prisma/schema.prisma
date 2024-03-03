@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          BigInt    @id(map: "mymodels_category_pkey") @default(autoincrement())
+  description String    @db.VarChar(100)
+  Expense     Expense[]
+}
+
+model Expense {
+  uuid        String    @unique(map: "mymodels_expense_uuid_key") @db.Uuid
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  amount      Decimal   @db.Decimal(15, 6)
+  date        DateTime  @db.Date
+  description String
+  category_id BigInt?
+  Category    Category? @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mymodels_expense_category_id_69043fe4_fk_mymodels_category_id")
+}
+
+model Income {
+  uuid        String    @unique(map: "mymodels_income_uuid_key") @db.Uuid
+  created_at  DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  amount      Decimal   @db.Decimal(15, 6)
+  date        DateTime  @db.Date
+  description String
+  source_id   BigInt?
+  Source      Source?   @relation(fields: [source_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mymodels_income_source_id_faf03a95_fk_mymodels_source_id")
+}
+
+model Source {
+  id          BigInt   @id(map: "mymodels_source_pkey") @default(autoincrement())
+  description String   @db.VarChar(100)
+  Income      Income[]
+}
